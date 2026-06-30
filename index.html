@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>TACTX: Learning Shared Tactile Representations Across Diverse Sensors</title>
+	<meta property="og:title" content="TACTX: Learning Shared Tactile Representations Across Diverse Sensors">
+	<meta property="og:description" content="TACTX learns shared tactile representations across vision-based, magnetic, and resistive sensors for zero-shot cross-sensor manipulation policy transfer.">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+	<link rel="stylesheet" href="style.css?v=2.1">
+</head>
+<body>
+	<header class="header" id="top">
+		<nav class="topbar" aria-label="Page navigation">
+			<a href="#abstract">Abstract</a>
+			<a href="#data">Data Collection</a>
+			<a href="#method">Method</a>
+			<a href="#demos">Zero-Shot Transfer</a>
+			<a href="#results">Results</a>
+			<a href="#release">Release</a>
+		</nav>
+
+		<h1><span class="brand">T<span class="brand-mid">ACT</span>X</span>: Learning Shared Tactile Representations Across Diverse Sensors</h1>
+		<div class="authors">
+			<span class="author-list">
+				<a href="index.html">Junsung Park</a><sup>1,2,*</sup>,
+				<a href="index.html">Sachin Bhadang</a><sup>1,*</sup>,
+				<a href="index.html">Carmelo Sferrazza</a><sup>3</sup>,
+				<a href="index.html">Sha Yi</a><sup>1</sup>,
+				<a href="index.html">Xiaolong Wang</a><sup>1</sup>
+			</span>
+			<span class="affiliations"><sup>1</sup>UC San Diego, <sup>2</sup>Seoul National University, <sup>3</sup>Amazon FAR</span>
+			<span class="author-note"><sup class="star">*</sup>Equal contribution; author order determined by coin flip.</span>
+		</div>
+		<p class="subtitle">
+			A shared tactile latent aligns vision-based, magnetic, and resistive sensors, enabling tactile-conditioned manipulation policies to transfer zero-shot across physically different hardware.
+		</p>
+		<div class="links">
+			<a class="btn" href="TACTX.pdf"><span>Paper</span></a>
+			<span class="btn btn-disabled" aria-disabled="true"><span>OpenReview</span></span>
+			<span class="btn btn-disabled" aria-disabled="true"><span>Code</span></span>
+			<span class="btn btn-disabled" aria-disabled="true"><span>Dataset</span></span>
+		</div>
+	</header>
+
+	<main class="content">
+		<section class="section" id="abstract">
+			<div class="section-heading">
+				<h2>Sensor-Agnostic Touch</h2>
+			</div>
+			<p class="abstract">
+				Tactile sensors provide critical information for contact-rich manipulation, yet tactile representations and policies remain tightly coupled to each specific sensor, limiting transferability across robots and hardware platforms. We propose TACTX, a framework for learning a transferable tactile representation across sensors spanning three fundamentally different transduction modalities: resistive, magnetic, and vision-based. TACTX maps heterogeneous tactile observations into a shared latent space through modality-specific encoders trained on paired contact data. Such paired interactions provide a natural alignment signal across modalities, and the encoders are jointly trained across all sensor pairs, inducing a consistent latent space for all sensor types. Across multiple manipulation tasks, TACTX improves average zero-shot cross-sensor policy success from 27.5% for vision-only transfer to 45.9%.
+			</p>
+			<div class="latent-row">
+				<figure class="intro-anim">
+					<img src="animations/intro_shared.gif" alt="TACTX intro animation: a shared latent representation across three sensing modalities.">
+				</figure>
+				<figure class="intro-anim">
+					<img src="animations/latent_beige_crop.gif" alt="TACTX latent space animation: paired contacts aligning in the shared tactile latent space.">
+				</figure>
+			</div>
+		</section>
+
+		<div class="hr"></div>
+
+		<section class="section" id="data">
+			<div class="section-heading">
+				<h2>Paired Contacts Across Heterogeneous Sensors</h2>
+			</div>
+			<div class="data-intro">
+				<p>
+					TACTX trains from simultaneous paired contact observations. Two tactile sensors are mounted on opposing fingers of a parallel-jaw gripper and record the same physical contact event through different sensing mechanisms.
+				</p>
+				<p>
+					Pairwise datasets connect Daimon, eFlesh, and FlexiTac. Left/right sensor swaps reduce mounting bias, and 10 3D-printed objects provide point, edge, and area contact geometries for alignment.
+				</p>
+			</div>
+			<div class="objects-row">
+				<figure class="objects-panel">
+					<img src="images/objects_padded.jpg" alt="Ten 3D-printed objects with point, edge, and area contact geometries used for paired data collection.">
+				</figure>
+				<article class="media-panel objects-video">
+					<video autoplay loop muted playsinline preload="auto" poster="video-posters/data_collection.jpg">
+						<source src="videos/data_collection.mp4" type="video/mp4">
+					</video>
+				</article>
+			</div>
+		</section>
+
+		<div class="hr"></div>
+
+		<section class="section" id="method">
+			<div class="section-heading">
+				<h2>Pairwise Training, One Shared Latent</h2>
+			</div>
+			<div class="method-intro">
+				<p>
+					Each sensor has its own encoder and decoder. Encoders map native tactile observations into a shared posterior over a 16-D latent space, while decoders reconstruct each modality from that latent.
+				</p>
+				<p>
+					TACTX combines contrastive alignment with self- and cross-reconstruction. Minibatches draw balanced samples from every sensor-pair dataset, inducing a globally consistent tactile space from pairwise supervision alone.
+				</p>
+			</div>
+			<div class="anim-stack">
+				<figure class="method-anim method-figure">
+					<img src="images/architecture.png" alt="TACTX architecture: modality-specific encoders and variational latent heads map each sensor into a shared latent space trained with InfoNCE, KL, and reconstruction losses.">
+				</figure>
+				<figure class="method-anim">
+					<img src="animations/architecture_beige_crop.gif" alt="TACTX architecture animation: forward pass for one paired contact through the shared latent space.">
+				</figure>
+			</div>
+		</section>
+
+		<div class="hr"></div>
+
+		<section class="section" id="demos">
+			<div class="section-heading">
+				<h2>Zero-Shot Cross-Sensor Policy Transfer</h2>
+			</div>
+			<p class="lead">
+				TACTX is evaluated on four contact-rich manipulation tasks, with an additional out-of-distribution pick-and-place setting that changes object color while preserving geometry. Below, we show zero-shot transfer, training on one sensor and deploying on another, chosen randomly for each task.
+			</p>
+			<div class="demo-stack">
+				<article class="video-card">
+					<video autoplay loop muted playsinline preload="auto" poster="video-posters/zero_shot_board.jpg">
+						<source src="videos/zero_shot_board.mp4" type="video/mp4">
+					</video>
+				</article>
+				<article class="video-card">
+					<video autoplay loop muted playsinline preload="auto" poster="video-posters/zero_shot_object.jpg">
+						<source src="videos/zero_shot_object.mp4" type="video/mp4">
+					</video>
+				</article>
+				<article class="video-card">
+					<video autoplay loop muted playsinline preload="auto" poster="video-posters/zero_shot_plug.jpg">
+						<source src="videos/zero_shot_plug.mp4" type="video/mp4">
+					</video>
+				</article>
+				<article class="video-card">
+					<video autoplay loop muted playsinline preload="auto" poster="video-posters/zero_shot_pnp.jpg">
+						<source src="videos/zero_shot_pnp.mp4" type="video/mp4">
+					</video>
+				</article>
+				<article class="video-card">
+					<video autoplay loop muted playsinline preload="auto" poster="video-posters/zero_shot_pnp_ood.jpg">
+						<source src="videos/zero_shot_pnp_ood.mp4" type="video/mp4">
+					</video>
+				</article>
+			</div>
+		</section>
+
+		<div class="hr"></div>
+
+		<section class="section" id="results">
+			<div class="section-heading">
+				<h2>Shared Tactile Representations Improves Transfer</h2>
+			</div>
+			<div class="result-grid">
+				<article class="result-card">
+					<strong>45.9%</strong>
+					<span>average TACTX cross-sensor success rate</span>
+				</article>
+				<article class="result-card">
+					<strong>27.5%</strong>
+					<span>average vision-only transfer success rate</span>
+				</article>
+				<article class="result-card">
+					<strong>0</strong>
+					<span>new policy demonstrations required at deployment</span>
+				</article>
+			</div>
+			<p class="lead">
+				TACTX achieves the strongest transfer on most task and sensor-pair combinations. The largest gains appear in contact-rich settings such as board wiping and object reorientation, where contact geometry matters beyond binary touch.
+			</p>
+			<figure class="table-figure">
+				<figcaption><strong>Cross-sensor policy transfer across all tasks.</strong> Each entry reports the number of successes out of 10 trials, shown as mean &plusmn; std over 3 runs. <strong>Bold</strong> indicates the best performance for each source&ndash;deploy combination and task.</figcaption>
+				<div class="table-wrap">
+					<table class="results-table">
+						<thead>
+							<tr>
+								<th>Method</th>
+								<th>Source</th>
+								<th>Deploy</th>
+								<th>P&amp;P</th>
+								<th>P&amp;P (OOD)</th>
+								<th>Insertion</th>
+								<th>Wiping</th>
+								<th>Reorient</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td rowspan="6" class="grp">Vision<br>Transfer</td>
+								<td rowspan="2" class="s-dai">Daimon</td>
+								<td class="s-efl">eFlesh</td>
+								<td>5.3 &plusmn; 0.9</td><td><strong>1.7 &plusmn; 0.9</strong></td><td>2.7 &plusmn; 0.5</td><td>3.0 &plusmn; 0.0</td><td>0.3 &plusmn; 0.5</td>
+							</tr>
+							<tr>
+								<td class="s-flx">FlexiTac</td>
+								<td>5.3 &plusmn; 0.5</td><td>1.3 &plusmn; 0.5</td><td>1.3 &plusmn; 0.9</td><td>1.3 &plusmn; 0.9</td><td>0.7 &plusmn; 0.9</td>
+							</tr>
+							<tr class="shade">
+								<td rowspan="2" class="s-efl">eFlesh</td>
+								<td class="s-dai">Daimon</td>
+								<td>7.7 &plusmn; 0.5</td><td>0.0 &plusmn; 0.0</td><td>3.7 &plusmn; 0.5</td><td>0.0 &plusmn; 0.0</td><td><strong>7.0 &plusmn; 0.0</strong></td>
+							</tr>
+							<tr class="shade">
+								<td class="s-flx">FlexiTac</td>
+								<td>1.3 &plusmn; 0.5</td><td>0.7 &plusmn; 0.5</td><td>0.3 &plusmn; 0.5</td><td>0.3 &plusmn; 0.5</td><td>1.3 &plusmn; 0.5</td>
+							</tr>
+							<tr>
+								<td rowspan="2" class="s-flx">FlexiTac</td>
+								<td class="s-dai">Daimon</td>
+								<td>7.0 &plusmn; 0.8</td><td>6.0 &plusmn; 0.0</td><td>3.3 &plusmn; 0.5</td><td>0.7 &plusmn; 0.5</td><td>7.3 &plusmn; 0.9</td>
+							</tr>
+							<tr>
+								<td class="s-efl">eFlesh</td>
+								<td>6.7 &plusmn; 0.5</td><td>1.0 &plusmn; 0.0</td><td>5.0 &plusmn; 0.0</td><td>0.3 &plusmn; 0.5</td><td>0.0 &plusmn; 0.0</td>
+							</tr>
+
+							<tr>
+								<td rowspan="6" class="grp">Binary<br>Contact<br>Transfer</td>
+								<td rowspan="2" class="s-dai">Daimon</td>
+								<td class="s-efl">eFlesh</td>
+								<td>4.0 &plusmn; 0.0</td><td>1.3 &plusmn; 0.9</td><td>2.7 &plusmn; 2.1</td><td>2.0 &plusmn; 2.8</td><td>1.7 &plusmn; 1.7</td>
+							</tr>
+							<tr>
+								<td class="s-flx">FlexiTac</td>
+								<td>3.3 &plusmn; 1.2</td><td><strong>2.7 &plusmn; 0.5</strong></td><td><strong>2.0 &plusmn; 0.8</strong></td><td><strong>2.0 &plusmn; 1.4</strong></td><td>4.0 &plusmn; 1.6</td>
+							</tr>
+							<tr class="shade">
+								<td rowspan="2" class="s-efl">eFlesh</td>
+								<td class="s-dai">Daimon</td>
+								<td>3.3 &plusmn; 0.9</td><td>0.0 &plusmn; 0.0</td><td>0.3 &plusmn; 0.5</td><td>1.0 &plusmn; 1.4</td><td>2.3 &plusmn; 2.1</td>
+							</tr>
+							<tr class="shade">
+								<td class="s-flx">FlexiTac</td>
+								<td><strong>4.0 &plusmn; 1.6</strong></td><td><strong>1.3 &plusmn; 1.2</strong></td><td>0.7 &plusmn; 0.9</td><td>0.3 &plusmn; 0.5</td><td><strong>6.0 &plusmn; 2.2</strong></td>
+							</tr>
+							<tr>
+								<td rowspan="2" class="s-flx">FlexiTac</td>
+								<td class="s-dai">Daimon</td>
+								<td>3.3 &plusmn; 1.7</td><td>2.7 &plusmn; 1.7</td><td>6.7 &plusmn; 0.5</td><td>1.3 &plusmn; 1.9</td><td>7.3 &plusmn; 2.4</td>
+							</tr>
+							<tr>
+								<td class="s-efl">eFlesh</td>
+								<td>1.0 &plusmn; 0.8</td><td>2.7 &plusmn; 1.9</td><td>0.3 &plusmn; 0.5</td><td>1.0 &plusmn; 0.8</td><td>2.7 &plusmn; 0.9</td>
+							</tr>
+
+							<tr>
+								<td rowspan="6" class="grp grp-ours">TactX<br>Transfer<br>(Ours)</td>
+								<td rowspan="2" class="s-dai">Daimon</td>
+								<td class="s-efl">eFlesh</td>
+								<td><strong>8.3 &plusmn; 0.5</strong></td><td>1.0 &plusmn; 0.0</td><td><strong>4.0 &plusmn; 0.8</strong></td><td><strong>4.0 &plusmn; 0.0</strong></td><td><strong>3.7 &plusmn; 0.9</strong></td>
+							</tr>
+							<tr>
+								<td class="s-flx">FlexiTac</td>
+								<td><strong>5.3 &plusmn; 1.2</strong></td><td>2.0 &plusmn; 0.8</td><td>1.3 &plusmn; 1.9</td><td>0.3 &plusmn; 0.5</td><td><strong>6.7 &plusmn; 0.9</strong></td>
+							</tr>
+							<tr class="shade">
+								<td rowspan="2" class="s-efl">eFlesh</td>
+								<td class="s-dai">Daimon</td>
+								<td><strong>9.0 &plusmn; 1.4</strong></td><td><strong>0.7 &plusmn; 0.5</strong></td><td><strong>6.0 &plusmn; 1.6</strong></td><td><strong>6.0 &plusmn; 0.8</strong></td><td>5.0 &plusmn; 1.4</td>
+							</tr>
+							<tr class="shade">
+								<td class="s-flx">FlexiTac</td>
+								<td><strong>1.3 &plusmn; 0.9</strong></td><td>0.0 &plusmn; 0.0</td><td><strong>3.7 &plusmn; 1.2</strong></td><td><strong>1.3 &plusmn; 0.5</strong></td><td>5.0 &plusmn; 0.8</td>
+							</tr>
+							<tr>
+								<td rowspan="2" class="s-flx">FlexiTac</td>
+								<td class="s-dai">Daimon</td>
+								<td><strong>8.0 &plusmn; 1.4</strong></td><td><strong>8.3 &plusmn; 1.2</strong></td><td><strong>8.3 &plusmn; 0.9</strong></td><td><strong>6.3 &plusmn; 0.9</strong></td><td><strong>7.7 &plusmn; 1.2</strong></td>
+							</tr>
+							<tr>
+								<td class="s-efl">eFlesh</td>
+								<td><strong>6.7 &plusmn; 0.9</strong></td><td><strong>3.0 &plusmn; 0.8</strong></td><td><strong>4.7 &plusmn; 0.5</strong></td><td><strong>5.7 &plusmn; 0.5</strong></td><td><strong>4.3 &plusmn; 0.5</strong></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</figure>
+		</section>
+
+		<div class="hr"></div>
+
+		<section class="section" id="release">
+			<div class="section-heading">
+				<h2>Open Resources</h2>
+			</div>
+			<div class="cards">
+				<article class="card">
+					<h3>Dataset</h3>
+					<p>Paired contact data across Daimon, eFlesh, and FlexiTac with left/right-swapped sensor-pair configurations.</p>
+				</article>
+				<article class="card">
+					<h3>Code</h3>
+					<p>Training and evaluation code for shared tactile representation learning, reconstruction, alignment, and ACT policy transfer.</p>
+				</article>
+				<article class="card">
+					<h3>Checkpoints</h3>
+					<p>TACTX encoder and decoder checkpoints, plus downstream tactile-conditioned policy checkpoints.</p>
+				</article>
+			</div>
+		</section>
+
+		<div class="hr"></div>
+
+		<section class="section citation-section" id="citation">
+			<div class="section-heading">
+				<h2>BibTeX</h2>
+			</div>
+			<p>If you find our work useful, please consider citing the paper as follows:</p>
+			<pre class="bibtex" id="bibtex-text">@misc{Anonymous2026TACTX,
+  title={TACTX: Learning Shared Tactile Representations Across Diverse Sensors},
+  author={Anonymous Authors},
+  year={2026}
+}</pre>
+		</section>
+	</main>
+
+	<footer>
+		<a href="#top"><span>Return to top</span></a>
+		<p>This website has been anonymized in compliance with 2026 submission guidelines.</p>
+	</footer>
+	<script>
+		document.querySelectorAll("video").forEach((video) => {
+			video.muted = true;
+			video.loop = true;
+			video.playsInline = true;
+			const play = video.play();
+			if (play) {
+				play.catch(() => {});
+			}
+		});
+	</script>
+</body>
+</html>
