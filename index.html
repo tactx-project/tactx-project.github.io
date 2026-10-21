@@ -9,7 +9,7 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
-	<link rel="stylesheet" href="style.css?v=2.3">
+	<link rel="stylesheet" href="style.css?v=2.4">
 </head>
 <body>
 	<header class="header" id="top">
@@ -124,30 +124,50 @@
 				TACTX is evaluated on four contact-rich manipulation tasks, with an additional out-of-distribution pick-and-place setting that changes object color while preserving geometry. Below, we show zero-shot transfer, training on one sensor and deploying on another, chosen randomly for each task.
 			</p>
 			<div class="demo-stack">
-				<article class="video-card">
-					<video autoplay loop muted playsinline preload="auto" poster="video-posters/zero_shot_board.jpg">
-						<source src="videos/zero_shot_board.mp4" type="video/mp4">
-					</video>
+				<article class="demo-card" aria-labelledby="demo-board-title">
+					<h3 id="demo-board-title">Board Wiping</h3>
+					<p class="demo-sensors"><span>Train: <strong class="sensor-flexitac">FlexiTac</strong></span><span>Deploy: <strong class="sensor-daimon">Daimon</strong></span></p>
+					<div class="video-card">
+						<video controls autoplay loop muted playsinline preload="auto" aria-label="Board Wiping comparison" poster="video-posters/zero_shot_board.jpg?v=2">
+							<source src="videos/zero_shot_board.mp4?v=2" type="video/mp4">
+						</video>
+					</div>
 				</article>
-				<article class="video-card">
-					<video autoplay loop muted playsinline preload="auto" poster="video-posters/zero_shot_object.jpg">
-						<source src="videos/zero_shot_object.mp4" type="video/mp4">
-					</video>
+				<article class="demo-card" aria-labelledby="demo-object-title">
+					<h3 id="demo-object-title">Object Reorientation</h3>
+					<p class="demo-sensors"><span>Train: <strong class="sensor-flexitac">FlexiTac</strong></span><span>Deploy: <strong class="sensor-eflesh">eFlesh</strong></span></p>
+					<div class="video-card">
+						<video controls autoplay loop muted playsinline preload="auto" aria-label="Object Reorientation comparison" poster="video-posters/zero_shot_object.jpg?v=2">
+							<source src="videos/zero_shot_object.mp4?v=2" type="video/mp4">
+						</video>
+					</div>
 				</article>
-				<article class="video-card">
-					<video autoplay loop muted playsinline preload="auto" poster="video-posters/zero_shot_plug.jpg">
-						<source src="videos/zero_shot_plug.mp4" type="video/mp4">
-					</video>
+				<article class="demo-card" aria-labelledby="demo-plug-title">
+					<h3 id="demo-plug-title">Plug Insertion</h3>
+					<p class="demo-sensors"><span>Train: <strong class="sensor-eflesh">eFlesh</strong></span><span>Deploy: <strong class="sensor-flexitac">FlexiTac</strong></span></p>
+					<div class="video-card">
+						<video controls autoplay loop muted playsinline preload="auto" aria-label="Plug Insertion comparison" poster="video-posters/zero_shot_plug.jpg?v=2">
+							<source src="videos/zero_shot_plug.mp4?v=2" type="video/mp4">
+						</video>
+					</div>
 				</article>
-				<article class="video-card">
-					<video autoplay loop muted playsinline preload="auto" poster="video-posters/zero_shot_pnp.jpg">
-						<source src="videos/zero_shot_pnp.mp4" type="video/mp4">
-					</video>
+				<article class="demo-card" aria-labelledby="demo-pnp-title">
+					<h3 id="demo-pnp-title">Pick &amp; Place</h3>
+					<p class="demo-sensors"><span>Train: <strong class="sensor-daimon">Daimon</strong></span><span>Deploy: <strong class="sensor-eflesh">eFlesh</strong></span></p>
+					<div class="video-card">
+						<video controls autoplay loop muted playsinline preload="auto" aria-label="Pick and Place comparison" poster="video-posters/zero_shot_pnp.jpg?v=2">
+							<source src="videos/zero_shot_pnp.mp4?v=2" type="video/mp4">
+						</video>
+					</div>
 				</article>
-				<article class="video-card">
-					<video autoplay loop muted playsinline preload="auto" poster="video-posters/zero_shot_pnp_ood.jpg">
-						<source src="videos/zero_shot_pnp_ood.mp4" type="video/mp4">
-					</video>
+				<article class="demo-card" aria-labelledby="demo-pnp-ood-title">
+					<h3 id="demo-pnp-ood-title">Pick &amp; Place (OOD)</h3>
+					<p class="demo-sensors"><span>Train: <strong class="sensor-daimon">Daimon</strong></span><span>Deploy: <strong class="sensor-flexitac">FlexiTac</strong></span></p>
+					<div class="video-card">
+						<video controls autoplay loop muted playsinline preload="auto" aria-label="Pick and Place OOD comparison" poster="video-posters/zero_shot_pnp_ood.jpg?v=2">
+							<source src="videos/zero_shot_pnp_ood.mp4?v=2" type="video/mp4">
+						</video>
+					</div>
 				</article>
 			</div>
 		</section>
@@ -325,6 +345,7 @@
 	<footer>
 		<a href="#top"><span>Return to top</span></a>
 	</footer>
+	<script src="demo-player.js?v=1"></script>
 	<script>
 		document.querySelectorAll("video").forEach((video) => {
 			video.muted = true;
