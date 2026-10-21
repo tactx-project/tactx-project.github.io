@@ -77,6 +77,14 @@ video {
 	text-transform: uppercase;
 }
 
+.venue-accepted {
+	color: var(--red);
+	font-size: 18px;
+	letter-spacing: 0.02em;
+	margin-bottom: 0;
+	text-transform: none;
+}
+
 h1,
 h2,
 h3,
@@ -283,9 +291,19 @@ h3 {
 .demo-stack {
 	display: grid;
 	gap: 16px;
-	grid-template-columns: 1fr;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
 	margin: 0 auto 22px;
 	max-width: 1104px;
+}
+
+.demo-stack .video-card {
+	grid-column: auto;
+}
+
+.demo-stack .video-card:last-child:nth-child(odd) {
+	grid-column: 1 / -1;
+	justify-self: center;
+	width: calc((100% - 16px) / 2);
 }
 
 .demo-stack .video-card video {
@@ -768,12 +786,17 @@ footer p {
 	}
 
 	.demo-grid,
+	.demo-stack,
 	.stats,
 	.cards,
 	.result-grid,
 	.objects-row,
 	.latent-row {
 		grid-template-columns: 1fr;
+	}
+
+	.demo-stack .video-card:last-child:nth-child(odd) {
+		width: 100%;
 	}
 
 	.thumbnails {
