@@ -200,6 +200,14 @@ h3 {
 	padding: 12px 16px;
 }
 
+.btn-icon {
+	display: block;
+	width: 20px;
+	height: 20px;
+	flex-shrink: 0;
+	object-fit: contain;
+}
+
 .btn:hover {
 	background: #2a353d;
 	text-decoration: none;
